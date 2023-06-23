@@ -22,3 +22,18 @@ input_ids = tokenizer("We are very happy to show you the transformers lib")
 print("Tokens: ", tokens)
 print("token_ids: ", token_ids)
 print("input_ids: ", input_ids)
+
+X = ["happy to show tokenizer library",
+     "sad to see you go"]
+
+batch = tokenizer(X, padding = True, truncation = True, max_length = 512, return_tensors="pt")
+
+with torch.no_grad():
+    outputs = model(**batch)  # unpack values in dictionary
+    print(outputs)
+    predictions = F.softmax(outputs.logits, dim =1)
+    print(predictions)
+    labels = torch.argmax(predictions, dim = 1)
+    print(labels)
+    labels = [model.config.id2label[label_id] for label_id in labels.tolist()]
+    print(labels)
